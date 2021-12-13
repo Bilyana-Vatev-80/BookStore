@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+
+            <h2 class="text-white text-center">Newly Added Reviews - Waiting for Approval</h2>
+            <hr class="hr-3 w-75 bg-white">
+            <br>
+
+            <div id="reviews-for-approval" class="row d-flex justify-content-center">
+                <article th:each="r : ${reviews}"
+                         th:object="${r}"
+                         class="card row mt-2 w-75">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <strong th:text="*{title != ''} ? *{title} : '[title not added]'"
+                                    class="font-weight-bold border-bottom border-dark">
+                            </strong>
+                        </h4>
+                        <p class="card-text"><strong th:text="|Rating: *{rating}|"></strong></p>
+                        <p class="card-text" th:text="*{textContent != ''} ? *{textContent} : '[textContent not added]'"></p>
+                        <footer class="blockquote-footer">Added by
+                            <strong th:text="*{nickname}"></strong>
+                            on <strong th:text="*{addedOn}"></strong>
+                        </footer>
+                    </div>
+                    <a th:href="@{/reviews/approve/{id}(id=*{id})}"
+                       class="btn btn-info btn-md w-25 m-3">
+                        Approve
+                    </a>
+                </article>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

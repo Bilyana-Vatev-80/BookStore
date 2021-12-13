@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+
+            <article id="author-wrapper" class="rounded p-2 m-3">
+
+                <div th:if="${addedSuccessfully}"
+                     class="alert visible alert-success alert-dismissible fade show" role="alert">
+                    <strong>Author added successfully!</strong>
+                    <button id="author-added-alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&#10005;</span>
+                    </button>
+                </div>
+
+                <section th:object="${author}"
+                         id="author-details"
+                         class="p-4 m-3 clearfix align-items-center">
+                    <section id="author-image" class="text-center">
+                        <img th:src="*{getPictureUrl()}" alt="Thumbnail [100%x225]"
+                             class="float-md-left mr-3 rounded"
+                             data-holder-rendered="true">
+                    </section>
+                    <section id="author-info">
+                        <h1 th:text="|*{firstName} *{lastName}|">Title</h1>
+                        <p th:text="*{description}"
+                           class="text-justify">Description
+                        </p>
+                    </section>
+                </section>
+            </article>
+
+            <div th:replace="fragments/book-cards-list :: bookcards(${books})"></div>
+
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/js/alerts.js}" type="text/javascript" defer></script>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

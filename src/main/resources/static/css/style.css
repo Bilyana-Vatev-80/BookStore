@@ -1,0 +1,462 @@
+body {
+    background-image: url('/images/background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: "Open Sans", Verdana, Helvetica, Arial, sans-serif;
+    color: #0b2e50;
+}
+
+body.form-page {
+    background-image: url('/images/background2.jpg');
+}
+
+.jumbotron {
+    background-image: url('/images/jumbotron-background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+    padding: 4vw;
+    margin: 4vh;
+}
+
+.navbar {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(6, 37, 58, 1) 46%, rgba(3, 46, 55, 1) 100%);
+}
+
+#content {
+    width: auto;
+    margin-left: 180px;
+}
+
+#book-wrapper, .shopping-cart-wrapper,
+#author-wrapper, #publishing-house-wrapper,
+#user-details-wrapper, #orders-wrapper,
+#order-view-wrapper, #stats-wrapper {
+    background-color: #ececec;
+}
+
+.container-fluid {
+    padding-top: 90px;
+}
+
+.navbar {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.avatar {
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.bg-blur {
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.8); /* Black w/opacity/see-through */
+    font-weight: bold;
+    border: 1px solid #979797;
+    z-index: 2;
+    width: 80%;
+    padding: 20px;
+}
+
+form.main-form {
+    background-position: center;
+    padding: 25px 50px;
+    border-radius: 15px;
+}
+
+.form-control, .custom-select {
+    background-color: #ececec !important;
+}
+
+form > input.form-control {
+    width: 400px !important;
+}
+
+form input[class="form-control"]:hover,
+textarea:hover, select:hover {
+    outline: 3px solid #122b54;
+}
+
+div.form-group input:read-only, option:disabled {
+    background-color: #B8B8B8 !important;
+}
+
+/* Book cards */
+.card {
+    background-color: #ececec !important;
+}
+
+.card-image {
+    position: relative;
+    max-width: 90%;
+    height: 250px;
+    width: 180px;
+    display: block;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.card-body div p {
+    height: 20px;
+    line-height: 20px;
+}
+
+/* Book Details View */
+#book-details {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-areas:
+        'book-cover book-info book-buttons';
+}
+
+#book-cover {
+    grid-area: book-cover;
+}
+
+#book-info {
+    grid-area: book-info;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+#book-buttons {
+    grid-area: book-buttons;
+}
+
+@media screen and (max-width: 992px) {
+    #book-details {
+        grid-template-areas:
+             'book-cover'
+             'book-info'
+             'book-buttons';
+    }
+}
+
+#book-buttons a.btn.btn-info, #book-buttons div form {
+    margin: 5px;
+}
+
+#book-cover img {
+    position: relative;
+    height: 400px;
+    width: 260px;
+}
+
+.ph-img {
+    height: 150px;
+    width: 150px;
+}
+
+.error-img {
+    height: 200px;
+    width: 200px;
+}
+
+/* Author View */
+#author-image img {
+    position: relative;
+    border: grey 1px solid;
+    height: 400px;
+    width: 280px;
+}
+
+#author-details {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-areas:
+        'author-image author-info author-info';
+}
+
+#author-image {
+    grid-area: author-image;
+}
+
+#author-info {
+    grid-area: author-info;
+    font-size: 14px;
+    line-height: 26px;
+}
+
+@media screen and (max-width: 992px) {
+    #author-details {
+        grid-template-areas:
+             'author-image'
+             'author-info';
+    }
+}
+
+/* Publishing House View */
+#publishing-house-image img {
+    position: relative;
+    height: 250px;
+    width: 250px;
+}
+
+#publishing-house-details {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-areas:
+        'publishing-house-image publishing-house-info publishing-house-info';
+}
+
+#publishing-house-image {
+    grid-area: publishing-house-image;
+}
+
+#publishing-house-info {
+    grid-area: publishing-house-info;
+    font-size: 14px;
+    line-height: 26px;
+}
+
+@media screen and (max-width: 992px) {
+    #publishing-house-details {
+        grid-template-areas:
+             'publishing-house-image'
+             'publishing-house-info';
+    }
+}
+
+.alert-success {
+    display: none;
+}
+
+.alert-success.visible {
+    display: block;
+}
+
+.user-reviews-container {
+    display: none;
+}
+
+.user-reviews-container.visible {
+    display: block;
+}
+
+/* Footer */
+.footer {
+    margin-top: 20px;
+    padding: 10px;
+    bottom: 0;
+    width: 100%;
+}
+
+
+/* Sidebar */
+/* Shrinking the sidebar from 150px to 100px and center aligning its content*/
+#sidebar {
+    left: 20px;
+    width: 180px;
+}
+
+.sidebar-blur {
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.8); /* Black w/opacity/see-through */
+    border-radius: 5px;
+}
+
+#sidebar.active {
+    min-width: 100px;
+    max-width: 100px;
+    text-align: center;
+}
+
+/* Toggling the sidebar header content, hide the big heading [h5] and showing the small heading [strong] and vice versa*/
+#sidebar .sidebar-header strong {
+    display: none;
+}
+
+#sidebar.active .sidebar-header h5 {
+    display: none;
+}
+
+#sidebar.active .sidebar-header strong {
+    display: block;
+}
+
+#sidebar ul li a {
+    text-align: left;
+}
+
+#sidebar.active ul li a {
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 0.85em;
+}
+
+#sidebar.active ul li a i {
+    margin-right: 0;
+    display: block;
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+
+/* Same dropdown links padding*/
+#sidebar.active ul ul a {
+    text-align: left;
+    padding: 10px !important;
+}
+
+/* Changing the arrow position to bottom center position,
+   translateX(50%) works with right: 50%
+   to accurately  center the arrow */
+#sidebar.active .dropdown-toggle::after {
+    top: auto;
+    bottom: 10px;
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+}
+
+@media (max-width: 768px) {
+    /* 100px and its content aligned to centre. */
+    #sidebar.active {
+        min-width: 100px;
+        max-width: 100px;
+        text-align: center;
+    }
+
+    /* Reappearing the sidebar on toggle button click */
+    #sidebar {
+        margin-left: 0;
+    }
+
+    /* Toggling the sidebar header content,
+       hide the big heading [h5] and showing the small heading [strong] and vice versa
+    */
+    #sidebar .sidebar-header strong {
+        display: none;
+    }
+
+    #sidebar.active .sidebar-header h5 {
+        display: none;
+    }
+
+    #sidebar.active .sidebar-header strong {
+        display: block;
+    }
+
+    /* Downsize the navigation links font size */
+    #sidebar.active ul li a {
+        padding: 20px 10px;
+        font-size: 0.85em;
+    }
+
+    #sidebar.active ul li a i {
+        margin-right: 0;
+        display: block;
+        font-size: 1.8em;
+        margin-bottom: 5px;
+    }
+
+    /* Adjust the dropdown links padding*/
+    #sidebar.active ul ul a {
+        text-align: left;
+        padding: 10px !important;
+    }
+
+    /* Changing the arrow position to bottom center position,
+      translateX(50%) works with right: 50%
+      to accurately  center the arrow */
+    .dropdown-toggle::after {
+        top: auto;
+        bottom: 10px;
+        right: 50%;
+        -webkit-transform: translateX(50%);
+        -ms-transform: translateX(50%);
+        transform: translateX(50%);
+    }
+}
+
+/* Shopping Cart */
+.cart {
+    padding: 4vh 5vh;
+}
+
+@media (max-width: 767px) {
+    .cart {
+        padding: 4vh;
+        border-bottom-left-radius: unset;
+        border-top-right-radius: 1rem
+    }
+}
+
+.summary {
+    background-color: #ddd;
+    border-radius: 1rem;
+    padding: 4vh;
+    color: rgb(65, 65, 65)
+}
+
+.summary .col-2 {
+    padding: 0
+}
+
+.summary .col-10 {
+    padding: 0
+}
+
+.row {
+    margin: 0
+}
+
+.main {
+    margin: 0;
+    padding: 2vh 0;
+    width: 100%
+}
+
+.col-2,
+.col {
+    padding: 0 1vh
+}
+
+.close {
+    margin-left: auto;
+    font-size: 0.7rem
+}
+
+img {
+    width: 4.5rem
+}
+
+.summary h5 {
+    margin-top: 4vh
+}
+
+.summary hr {
+    margin-top: 1.25rem
+}
+
+.link-disabled {
+    opacity: .4;
+    cursor: default !important;
+    pointer-events: none;
+}
+
+/* Dashboard */
+#dashboard table {
+    margin: 0 auto;
+    border: 1px solid black;
+    box-shadow: 10px 10px 35px 1px;
+    background: linear-gradient(white, #005cbf);
+}
+
+.list-group {
+    counter-reset: myOrderedListItemsCounter;
+    padding-left: 0;
+}
+
+.list-group > li:before {
+    counter-increment: myOrderedListItemsCounter;
+    content: counter(myOrderedListItemsCounter) ".";
+    margin-right: 0.5em;
+}

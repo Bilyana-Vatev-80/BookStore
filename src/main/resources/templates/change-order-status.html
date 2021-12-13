@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body class="form-page">
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+            <form th:method="POST"
+                  th:action="@{/orders/change-status}"
+                  class="main-form mx-auto w-50 bg-blur">
+                <h2 class="text-white">Change Order Status</h2>
+                <hr class="hr-3 w-100 bg-white">
+                <br>
+
+                <div class="form-group">
+                    <label for="orderId" class="col-form-label text-white font-weight-bold">Order ID</label>
+                    <input id="orderId"
+                           name="orderId"
+                           type="text"
+                           required
+                           class="form-control"
+                           placeholder="Order ID"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-form-label text-white font-weight-bold">Status</label>
+                    <div>
+                        <input checked
+                               type="radio"
+                               id="ordered"
+                               name="status"
+                               value="ordered">
+                        <label for="ordered"
+                               class="col-form-label text-white font-weight-bold">
+                            Ordered</label><br/>
+
+                        <input type="radio"
+                               id="received"
+                               name="status"
+                               value="received">
+                        <label for="received"
+                               class="col-form-label text-white font-weight-bold">
+                            Received</label><br/>
+
+                        <input type="radio"
+                               id="packaged"
+                               name="status"
+                               value="packaged">
+                        <label for="packaged"
+                               class="col-form-label text-white font-weight-bold">
+                            Packaged</label><br/>
+
+                        <input type="radio"
+                               id="sent"
+                               name="status"
+                               value="sent">
+                        <label for="sent"
+                               class="col-form-label text-white font-weight-bold">
+                            Sent</label><br/>
+
+                        <input type="radio"
+                               id="delivered"
+                               name="status"
+                               value="delivered">
+                        <label for="delivered"
+                               class="col-form-label text-white font-weight-bold">
+                            Delivered</label><br/>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    <input type="submit" class="btn btn-info btn-md btn-block w-50" value="Update Status"/>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

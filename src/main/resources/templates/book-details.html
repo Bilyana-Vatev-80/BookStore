@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <article th:object="${book}"
+                     id="book-wrapper" class="rounded p-2 m-3">
+
+                <input id="bookId" type="hidden" th:value="*{id}">
+
+                <div th:if="${addedSuccessfully}"
+                     class="alert visible alert-success alert-dismissible fade show" role="alert">
+                    <strong>Book added successfully!</strong>
+                    <button id="book-added-alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&#10005;</span>
+                    </button>
+                </div>
+
+                <div th:if="${updatedSuccessfully}"
+                     class="alert visible alert-success alert-dismissible fade show" role="alert">
+                    <strong>Book updated successfully!</strong>
+                    <button id="book-updated-alert" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&#10005;</span>
+                    </button>
+                </div>
+
+                <section id="book-details" class="p-4 m-3 align-content-center">
+                    <section id="book-cover" class="text-center">
+                        <img th:src="*{getPictureUrl()}" alt="Thumbnail [100%x225]"
+                             class="rounded"
+                             data-holder-rendered="true">
+                    </section>
+
+                    <section id="book-info">
+                        <h1 th:text="*{title}">Title</h1>
+                        <ul class="attribute-list text-left">
+                            <li>
+                                <strong>Author: </strong>
+                                <a th:text="*{author}" th:href="@{/authors/{id}(id=*{authorId})}">
+                                    Author name
+                                </a>
+                            </li>
+                            <li>
+                                <strong>Publishing house: </strong>
+                                <a th:text="*{publishingHouse.getName()}"
+                                   th:href="@{/publishinghouses/{id}(id=*{publishingHouse.getId()})}">
+                                    Publishing House
+                                </a>
+                            </li>
+                            <li>
+                                <strong>Language: </strong>
+                                <span th:text="*{language}"></span>
+                            </li>
+                            <li>
+                                <strong>ISBN: </strong>
+                                <span th:text="*{isbn}"></span>
+                            </li>
+                            <li>
+                                <strong>Release year: </strong>
+                                <span th:text="*{releaseYear}"></span>
+                            </li>
+                            <li>
+                                <strong>Pages count: </strong>
+                                <span th:text="*{pagesCount}"></span>
+                            </li>
+                            <li>
+                                <strong>Categories: </strong>
+                                <span th:text="${#strings.setJoin(book.categories, ', ')}"></span>
+                            </li>
+                            <li>
+                                <strong>Price: </strong>
+                                <span th:text="|*{price} BGN|"></span>
+                            </li>
+                            <li>
+                                <strong th:if="*{getCopies() > 0}" th:class="text-success">In stock</strong>
+                                <strong th:if="*{getCopies() == 0}" th:class="text-secondary">Out of stock</strong>
+                            </li>
+
+                            <br/>
+
+                            <ul sec:authorize="hasRole('ROLE_ADMIN')">
+                                <li>
+                                    <strong>Copies in stock: </strong>
+                                    <span th:text="*{copies}"></span>
+                                </li>
+                                <li>
+                                    <strong>Added on: </strong>
+                                    <span th:text="${#temporals.format(book.addedOn, 'yyyy-MM-dd HH:mm')}"></span>
+                                </li>
+                                <li>
+                                    <strong>Last modified on: </strong>
+                                    <span th:text="${#temporals.format(book.modified, 'yyyy-MM-dd HH:mm')}"></span>
+                                </li>
+                                <li>
+                                    <strong>Added by: </strong>
+                                    <span th:text="*{creator}"></span>
+                                </li>
+                                <li>
+                                    <strong>Item Viewed: </strong>
+                                    <span th:text="|${viewsCount} time(s)|"></span>
+                                </li>
+                            </ul>
+                        </ul>
+                    </section>
+
+                    <section id="book-buttons" class="d-flex flex-column justify-content-center">
+                        <th:block sec:authorize="isAuthenticated()">
+                            <div class="btn-group">
+                                <a th:href="@{/cart/add/{id}(id=*{id})}" id="addToCartBtn"
+                                   type="button"
+                                   title="Add to Cart"
+                                   class="btn btn-info btn-md btn-block w-100"
+                                   th:classappend="*{getCopies()} == 0 ? 'disabled' : ''">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                            </div>
+                            <div class="btn-group">
+                                <a th:href="@{/wishlist/add/{id}(id=*{id})}"
+                                   type="button"
+                                   title="Add to Favorites"
+                                   class="btn btn-info btn-md btn-block w-100">
+                                    <i class="far fa-heart"></i> Add to Favourites</a>
+                            </div>
+                        </th:block>
+                        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div class="btn-group">
+                                <a th:href="@{/books/edit/{id}(id=*{id})}"
+                                   type="button"
+                                   title="Edit Book"
+                                   class="btn btn-info btn-md btn-block w-100">
+                                    <i class="far fa-edit"></i> Edit</a>
+                            </div>
+                            <div class="btn-group">
+                                <form th:action="@{/books/{id}(id=*{id})}"
+                                      th:method="delete" class="w-100">
+                                    <button type="button"
+                                            title="Delete Book"
+                                            class="btn btn-danger btn-md btn-block w-100"
+                                            data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+                                        <i class="fa fa-trash-o fa-lg"></i> Delete
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteConfirmModal"
+                                         data-bs-backdrop="static" data-bs-keyboard="false"
+                                         tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteConfirmModalLabel">Delete
+                                                        Book</h5>
+                                                    <button type="button" class="close btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&#10005;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete this book?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary btn-close m-1 w-25"
+                                                            data-bs-dismiss="modal">No
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary m-1 w-25">Yes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </th:block>
+                    </section>
+                </section>
+
+                <section id="description-info" class="p-4 m-3">
+                    <h3 class="text-center">Full Book Description: </h3>
+                    <p class="text-justify" th:text="*{description}">
+                        Description
+                    </p>
+                </section>
+
+                <section class="p-4 m-3">
+                    <h5 class="text-center" th:text="|Publishing House: *{publishingHouse.getName()}|">
+                    </h5>
+                    <div class="clearfix align-items-center">
+                        <a th:href="@{/publishinghouses/{id}(id=*{publishingHouse.getId()})}">
+                            <img class="ph-img float-md-left mr-3" th:src="*{publishingHouse.getImageUrl()}"
+                                 alt="Thumbnail [100%x225]"
+                                 data-holder-rendered="true">
+                        </a>
+                        <p class="text-justify" th:text="*{publishingHouse.getDescription()}">
+                            Publishing House Description
+                        </p>
+                    </div>
+                </section>
+
+                <section id="book-reviews" class="p-4 m-3">
+                    <h5 class="text-center">Reviews</h5>
+                    <a th:href="@{/reviews/add/{id}(id=*{id})}"
+                       type="button" class="btn btn-info btn-md btn-block w-25">
+                        Add Review
+                    </a>
+                    <input sec:authorize="hasRole('ROLE_ADMIN')" id="isAdmin" type="hidden">
+                    <div class="mt-3" id="book-reviews-container">
+                    </div>
+                </section>
+            </article>
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/js/modal.js}" type="text/javascript"></script>
+<script th:src="@{/js/reviews-search.js}" type="text/javascript" defer></script>
+<script th:src="@{/js/alerts.js}" type="text/javascript" defer></script>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

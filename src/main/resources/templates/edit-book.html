@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body class="form-page">
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+            <form enctype="multipart/form-data"
+                  th:method="patch"
+                  th:object="${bookUpdateBindingModel}"
+                  th:action="@{/books/edit/{id}(id=*{id})}"
+                  class="main-form mx-auto w-75 bg-blur">
+                <h2 class="text-white">Edit Book</h2>
+                <hr class="hr-3 w-100 bg-white">
+                <br>
+
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="isbn" class="col-form-label text-white font-weight-bold">ISBN</label>
+                        <input th:field="*{isbn}"
+                               th:errorclass="is-invalid"
+                               id="isbn"
+                               name="isbn"
+                               type="text"
+                               required
+                               class="form-control"
+                               placeholder="ISBN"
+                               aria-describedby="isbnError"/>
+                        <small th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"
+                               id="isbnError"
+                               class="invalid-feedback errors alert alert-danger">
+                            ISBN is required.
+                        </small>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="title" class="col-form-label text-white font-weight-bold">Title</label>
+                        <input th:field="*{title}"
+                               readonly
+                               id="title"
+                               name="title"
+                               type="text"
+                               class="form-control"
+                               placeholder="Title"
+                               aria-describedby=""/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="pagesCount" class="col-form-label text-white font-weight-bold">Pages Count</label>
+                        <input th:field="*{pagesCount}"
+                               th:errorclass="is-invalid"
+                               id="pagesCount"
+                               name="pagesCount"
+                               type="number"
+                               required
+                               min="1"
+                               class="form-control"
+                               placeholder="Pages Count"
+                               aria-describedby="pagesCountError"/>
+                        <small th:if="${#fields.hasErrors('pagesCount')}" th:errors="*{pagesCount}"
+                               id="pagesCountError"
+                               class="invalid-feedback errors alert alert-danger">
+                            Pages Count is required.
+                        </small>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="copies" class="col-form-label text-white font-weight-bold">Copies</label>
+                        <input th:field="*{copies}"
+                               th:errorclass="is-invalid"
+                               id="copies"
+                               name="copies"
+                               type="number"
+                               required
+                               min="1"
+                               class="form-control"
+                               placeholder="Copies"
+                               aria-describedby="copiesError"/>
+                        <small th:if="${#fields.hasErrors('copies')}" th:errors="*{copies}"
+                               id="copiesError"
+                               class="invalid-feedback errors alert alert-danger">
+                            Copies is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="releaseYear" class="col-form-label text-white font-weight-bold">Release Year</label>
+                        <input th:field="*{releaseYear}"
+                               th:errorclass="is-invalid"
+                               id="releaseYear"
+                               name="releaseYear"
+                               type="number"
+                               required
+                               class="form-control"
+                               placeholder="Release Year"
+                               aria-describedby="releaseYearError"/>
+                        <small th:if="${#fields.hasErrors('releaseYear')}" th:errors="*{releaseYear}"
+                               id="releaseYearError"
+                               class="invalid-feedback errors alert alert-danger">
+                            Release Year is required.
+                        </small>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="price" class="col-form-label text-white font-weight-bold">Price</label>
+                        <input th:field="*{price}"
+                               th:errorclass="is-invalid"
+                               id="price"
+                               name="price"
+                               type="text"
+                               required
+                               min="1"
+                               class="form-control"
+                               placeholder="Price"
+                               aria-describedby="priceError"/>
+                        <small th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
+                               id="priceError"
+                               class="invalid-feedback errors alert alert-danger">
+                            Price is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="authorFirstName" class="col-form-label text-white font-weight-bold">Author First
+                            Name</label>
+                        <input th:field="*{authorFirstName}"
+                               th:errorclass="is-invalid"
+                               id="authorFirstName"
+                               name="authorFirstName"
+                               type="text"
+                               required
+                               class="form-control"
+                               placeholder="authorFirstName"
+                               aria-describedby="authorFirstNameError"/>
+                        <small th:if="${#fields.hasErrors('authorFirstName')}" th:errors="*{authorFirstName}"
+                               id="authorFirstNameError"
+                               class="invalid-feedback errors alert alert-danger">
+                            Author First Name is required.
+                        </small>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="authorLastName" class="col-form-label text-white font-weight-bold">Author Last
+                            Name</label>
+                        <input th:field="*{authorLastName}"
+                               th:errorclass="is-invalid"
+                               id="authorLastName"
+                               name="authorLastName"
+                               type="text"
+                               required
+                               class="form-control"
+                               placeholder="authorLastName"
+                               aria-describedby="authorLastNameError"/>
+                        <small th:if="${#fields.hasErrors('authorLastName')}" th:errors="*{authorLastName}"
+                               id="authorLastNameError"
+                               class="invalid-feedback errors alert alert-danger">
+                            Author Last Name is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-form-label text-white font-weight-bold">Description</label>
+                    <textarea th:field="*{description}"
+                              th:errorclass="is-invalid"
+                              id="description"
+                              name="description"
+                              type="text"
+                              class="form-control"
+                              placeholder="Description"
+                              aria-describedby="descriptionError"></textarea>
+                    <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                           id="descriptionError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Description is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="image" class="col-form-label text-white font-weight-bold">Image</label>
+                    <input th:field="*{image}"
+                           th:errorclass="is-invalid"
+                           id="image"
+                           name="image"
+                           type="file"
+                           accept=".jpg, .jpeg, .png"
+                           class="form-control-file rounded"
+                           aria-describedby="imageError"/>
+                    <small th:if="${#fields.hasErrors('image')}" th:errors="*{image}"
+                           id="imageError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Image is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="language" class="col-form-label text-white font-weight-bold">Language</label>
+                    <select th:field="*{language}"
+                            th:errorclass="is-invalid"
+                            id="language"
+                            name="language"
+                            required
+                            class="custom-select"
+                            aria-describedby="languageError">
+                        <option th:each="l : ${languages}"
+                                th:text="${l}"
+                                th:value="${l}"
+                                th:selected="${l} == *{language}">
+                        </option>
+                    </select>
+                    <small th:if="${#fields.hasErrors('language')}" th:errors="*{language}"
+                           id="languageError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Language is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="publishingHouseName" class="col-form-label text-white font-weight-bold">Publishing
+                        House</label>
+                    <select th:field="*{publishingHouseName}"
+                            th:errorclass="is-invalid"
+                            id="publishingHouseName"
+                            name="publishingHouseName"
+                            required
+                            class="custom-select"
+                            aria-describedby="publishingHouseError">
+                        <option th:each="p : ${publishingHouses}"
+                                th:text="${p}"
+                                th:value="${p}"
+                                th:selected="${p} == *{publishingHouseName}">
+                        </option>
+                    </select>
+                    <small th:if="${#fields.hasErrors('publishingHouseName')}" th:errors="*{publishingHouseName}"
+                           id="publishingHouseError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Publishing House is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="categories" class="col-form-label text-white font-weight-bold">Categories</label>
+                    <select th:field="*{categories}"
+                            th:errorclass="is-invalid"
+                            id="categories"
+                            name="categories"
+                            required
+                            class="custom-select"
+                            multiple
+                            aria-describedby="categoriesError">
+                        <option th:each="c : ${categories}"
+                                th:text="${c}"
+                                th:value="${c}">
+                        </option>
+                    </select>
+                    <small th:if="${#fields.hasErrors('categories')}" th:errors="*{categories}"
+                           id="categoriesError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Category is required.
+                    </small>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    <input type="submit" class="btn btn-info btn-md btn-block w-50" value="Edit Book"/>
+                </div>
+            </form>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

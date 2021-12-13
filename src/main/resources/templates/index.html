@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+            <div class="jumbotron text-center mx-5">
+                <h1 class="display-4">Welcome to</h1>
+                <h1 class="display-4"><strong>The Books Station!</strong></h1>
+                <p class="lead">Here you will find a world of entertainment and adventure, inspiration and great
+                    ideas, happiness and calm.</p>
+                <hr class="my-4">
+                <p>A single book has thousands of experiences...</p>
+                <div class="row d-flex justify-content-center">
+                    <a th:href="@{/books/all}"
+                       type="button" class="btn btn-info btn-md btn-block w-25 my-3">
+                        Search books
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h5 class="text-white text-center font-weight-bold mb-3">Newest Books in Store</h5>
+                <hr class="hr-3 w-75 bg-white">
+                <div th:replace="fragments/book-cards-list :: bookcards(${newestBooks})"></div>
+            </div>
+            <div>
+                <h5 class="text-white text-center font-weight-bold mb-3">Most Popular</h5>
+                <hr class="hr-3 w-75 bg-white">
+                <div th:replace="fragments/book-cards-list :: bookcards(${mostPopularBooks})"></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+
+            <div id="dashboard">
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-6 p-3">
+                        <div class="bg-white p-3 w-100 h-100 rounded">
+                            <div id="googleComboChart"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-3">
+                        <div class="row justify-content-between bg-white p-3 w-100 h-100 rounded">
+                            <div id="googlePieChart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-between mt-4">
+                    <div class="col-md-6 p-3">
+                        <div class="bg-white p-3 w-100 h-100 rounded">
+                            <div class="auto-jsCalendar w-100"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-3">
+                        <div class="bg-white p-3 w-100 h-100 rounded">
+                            <h5 class="text-center font-weight-bold border-bottom">Books with 2 or fewer copies
+                                left</h5>
+                            <ol class="list-group">
+                                <li th:each="title : ${bookTitles}"
+                                    th:text="${title}"
+                                    class="p-2 ml-3">
+                                    Book Title
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+
+    google.charts.setOnLoadCallback(drawComboChart);
+
+    function drawComboChart() {
+        // Draw the chart and set the chart values
+        let dataCombo = google.visualization.arrayToDataTable([
+            ['Month', 'Sold Books', 'Income'],
+            ['January', [[${soldBooksPerMonth[1]}]], [[${incomePerMonth[1]}]]],
+            ['February', [[${soldBooksPerMonth[2]}]], [[${incomePerMonth[2]}]]],
+            ['March', [[${soldBooksPerMonth[3]}]], [[${incomePerMonth[3]}]]],
+            ['April', [[${soldBooksPerMonth[4]}]], [[${incomePerMonth[4]}]]],
+            ['May', [[${soldBooksPerMonth[5]}]], [[${incomePerMonth[5]}]]],
+            ['June', [[${soldBooksPerMonth[6]}]], [[${incomePerMonth[6]}]]],
+            ['July', [[${soldBooksPerMonth[7]}]], [[${incomePerMonth[7]}]]],
+            ['August', [[${soldBooksPerMonth[8]}]], [[${incomePerMonth[8]}]]],
+            ['September', [[${soldBooksPerMonth[9]}]], [[${incomePerMonth[9]}]]],
+            ['October', [[${soldBooksPerMonth[10]}]], [[${incomePerMonth[10]}]]],
+            ['November', [[${soldBooksPerMonth[11]}]], [[${incomePerMonth[11]}]]],
+            ['December', [[${soldBooksPerMonth[12]}]], [[${incomePerMonth[12]}]]],
+        ]);
+
+        // Add chart options
+        let optionsCombo = {
+            title: 'Orders Per Month',
+            hAxis: {title: 'Month'},
+            vAxis: {
+                0: {minValue: 0},
+                1: {minValue: 0}
+            },
+            seriesType: 'bars',
+            series: {
+                0: {targetAxisIndex: 0, color: '#028ca6'},
+                1: {targetAxisIndex: 1, type: 'line', color: '#ebf203'}
+            }
+        };
+
+        // Display the chart inside the <div> element with id="googleComboChart"
+        let chartCombo = new google.visualization
+            .ComboChart(document.getElementById('googleComboChart'));
+        chartCombo.draw(dataCombo, optionsCombo);
+    }
+
+    // Load google Pie charts
+    google.charts.setOnLoadCallback(drawPieChart);
+
+    // Draw the chart and set the chart values
+    function drawPieChart() {
+        let dataPie = google.visualization.arrayToDataTable([
+            ['Category', 'Books count'],
+            ['Fiction', [[${categoriesMap[FICTION]}]]],
+            ['Crime and thriller', [[${categoriesMap[CRIME_AND_THRILLER]}]]],
+            ['Romance', [[${categoriesMap[ROMANCE]}]]],
+            ['Fantasy', [[${categoriesMap[FANTASY]}]]],
+            ['Science Fiction', [[${categoriesMap[SCIENCE_FICTION]}]]],
+            ['Science', [[${categoriesMap[SCIENCE]}]]],
+            ['Classics', [[${categoriesMap[CLASSICS]}]]],
+            ['Children', [[${categoriesMap[CHILDREN]}]]],
+            ['History', [[${categoriesMap[HISTORY]}]]],
+            ['Art', [[${categoriesMap[ART]}]]],
+            ['Dystopia', [[${categoriesMap[DYSTOPIA]}]]],
+            ['Horror', [[${categoriesMap[HORROR]}]]],
+            ['Poetry', [[${categoriesMap[POETRY]}]]]
+        ]);
+
+        // Add chart options
+        let optionsPie = {
+            title: "Books by Categories",
+            is3D: true,
+            chartArea: {left: 0, top: 0, right: 0, bottom: 0}
+        };
+
+        // Display the chart inside the <div> element with id="googlePieChart"
+        let chartPie = new google.visualization
+            .PieChart(document.getElementById('googlePieChart'));
+        chartPie.draw(dataPie, optionsPie);
+    }
+</script>
+
+</body>
+</html>

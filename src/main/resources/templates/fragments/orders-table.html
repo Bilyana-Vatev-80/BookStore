@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="orders-table(orders)" class="table-responsive rounded">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Order #</th>
+            <th scope="col">Date</th>
+            <th scope="col">Delivery To</th>
+            <th scope="col">Price</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="o : ${orders}"
+            th:object="${o}">
+            <td th:text="*{id}">Order Id</td>
+            <td th:text="${#temporals.format(o.orderTime, 'yyyy-MM-dd HH:mm')}">Order Time</td>
+            <td th:text="*{customerFullName}">Delivery To</td>
+            <td th:text="|*{price} BGN|">Price</td>
+            <td th:text="*{status}">Status</td>
+            <td>
+                <a th:href="@{/orders/{id}(id=*{id})}">
+                    View Order
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

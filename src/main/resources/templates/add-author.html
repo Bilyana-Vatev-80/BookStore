@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body class="form-page">
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+            <form enctype="multipart/form-data"
+                  th:method="POST"
+                  th:action="@{/authors/add}"
+                  th:object="${authorAddBindingModel}"
+                  class="main-form mx-auto w-50 bg-blur">
+                <h2 class="text-white">Add New Author</h2>
+                <hr class="hr-3 w-100 bg-white">
+                <br>
+
+                <div class="form-group">
+                    <label for="firstName" class="col-form-label text-white font-weight-bold">First Name</label>
+                    <input th:field="*{firstName}"
+                           th:errorclass="is-invalid"
+                           id="firstName"
+                           name="firstName"
+                           type="text"
+                           required
+                           minlength="2" maxlength="20"
+                           class="form-control"
+                           placeholder="First Name"
+                           aria-describedby="firstNameError"/>
+                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                           id="firstNameError"
+                           class="invalid-feedback errors alert alert-danger">
+                        First Name is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="col-form-label text-white font-weight-bold">Last Name</label>
+                    <input th:field="*{lastName}"
+                           th:errorclass="is-invalid"
+                           id="lastName"
+                           name="lastName"
+                           type="text"
+                           required
+                           minlength="2" maxlength="20"
+                           class="form-control"
+                           placeholder="Last Name"
+                           aria-describedby="lastNameError"/>
+                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                           id="lastNameError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Last Name is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-form-label text-white font-weight-bold">Description</label>
+                    <textarea th:field="*{description}"
+                              th:errorclass="is-invalid"
+                              id="description"
+                              name="description"
+                              type="text"
+                              class="form-control"
+                              placeholder="Description"
+                              aria-describedby="descriptionError"></textarea>
+                    <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                           id="descriptionError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Description is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="image" class="col-form-label text-white font-weight-bold">Image</label>
+                    <input th:field="*{image}"
+                           th:errorclass="is-invalid"
+                           id="image"
+                           name="image"
+                           type="file"
+                           accept=".jpg, .jpeg, .png"
+                           class="form-control-file rounded"
+                           aria-describedby="imageError"/>
+                    <small th:if="${#fields.hasErrors('image')}" th:errors="*{image}"
+                           id="imageError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Image is required.
+                    </small>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    <input type="submit" class="btn btn-info btn-md btn-block w-50" value="Add Author"/>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

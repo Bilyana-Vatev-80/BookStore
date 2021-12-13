@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <div th:object="${order}" id="order-view-wrapper" class="rounded p-2 m-3">
+                <div class="row d-flex justify-content-center">
+                    <section id="general-order-info" class="p-4 ml-3 mr-auto">
+                        <h4>
+                            <strong>Order # </strong>
+                            <span th:text="*{id}"></span>
+                        </h4>
+                        <h5>
+                            <strong>Order Time: </strong>
+                            <span th:text="${#temporals.format(order.orderTime, 'yyyy-MM-dd HH:mm')}"></span>
+                        </h5>
+                        <h5>
+                            <strong>Status: </strong>
+                            <span th:text="*{status}"></span>
+                        </h5>
+                        <a sec:authorize="hasRole('ROLE_ADMIN')"
+                           th:href="@{/orders/proceed/{id}(id=*{id})}"
+                           class="btn btn-info btn-md btn-block"
+                           th:classappend="${canProceed} ? '' : 'disabled'">
+                            Proceed Order
+                        </a>
+                    </section>
+
+                    <section id="customer-info" class="p-4 mx-auto">
+                        <h5 class="font-weight-bold border-bottom">Customer: </h5>
+                        <span th:text="*{customerFullName}"></span>
+                        <h5 class="font-weight-bold border-bottom">Delivery Address: </h5>
+                        <span th:text="*{customerAddress}"></span>
+                    </section>
+                </div>
+
+                <section id="order-history" class="p-4 m-3">
+                    <h5 class="font-weight-bold border-bottom">Order History</h5>
+                    <div th:each="orderLog : ${orderLogs}"
+                         th:object="${orderLog}">
+                        <div class="row">
+                            <div th:text="${#temporals.format(orderLog.changeTime, 'yyyy-MM-dd HH:mm')}"
+                                 class="col"></div>
+                            <div th:text="*{status}" class="col"></div>
+                        </div>
+                        <br>
+                    </div>
+                </section>
+
+                <section id="ordered-items" class="p-4 m-3">
+                    <h5 class="font-weight-bold border-bottom">Ordered Books</h5>
+
+                    <div class="table-responsive rounded">
+                        <table class="table table-light table-striped table-hover">
+                            <thead class="thead-dark font-weight-bold">
+                            <tr>
+                                <th scope="col" class="col-md-4">Book</th>
+                                <th scope="col" class="col-md-3 text-center">Single Price</th>
+                                <th scope="col" class="col-md-2 text-center">Quantity</th>
+                                <th scope="col" class="col-md-3 text-center">Total Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="book : ${order.orderedBooks}"
+                                th:object="${book}">
+                                <td class="col-md-4">
+                                    <div class="row justify-content-start">
+                                        <div class="pr-3">
+                                            <a th:href="@{/books/{id}(id=*{bookId})}"
+                                               th:title="*{bookTitle}"
+                                               th:classappend="*{bookActive == false} ? 'link-disabled'">
+                                                <img class="img-fluid" th:src="*{bookPictureUrl}">
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a th:href="@{/books/{id}(id=*{bookId})}"
+                                               th:title="*{bookTitle}"
+                                               th:classappend="*{bookActive == false} ? 'link-disabled'">
+                                                <p class="card-title text-dark" th:text="*{bookTitle}"></p>
+                                            </a>
+                                            <small th:if="*{bookActive == false}" class="text-secondary">
+                                                Book not available in store
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-md-3 text-center"
+                                    th:text="|*{bookPrice} BGN|">
+                                </td>
+                                <td class="col-md-2 text-center"
+                                    th:text="|x *{quantity}|">
+                                </td>
+                                <td class="col-md-3 text-center"
+                                    th:text="|*{totalPrice} BGN|">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row d-flex justify-content-end">
+                        <strong th:text="|Total: *{price} BGN|"></strong>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+<script th:src="@{/js/reviews-search.js}" type="text/javascript" defer></script>
+
+</body>
+</html>

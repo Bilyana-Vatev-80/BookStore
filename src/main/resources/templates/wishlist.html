@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+
+            <h2 class="text-white text-center">Wishlist</h2>
+            <hr class="hr-3 w-75 bg-white">
+            <br>
+
+            <h5 th:text="|${booksCount} Book(s)|" class="text-white text-center">
+            </h5>
+            <br>
+
+            <div class="row d-flex justify-content-center mt-3">
+                <article th:each="b : ${books}"
+                         th:object="${b}"
+                         class="card rounded p-2 m-3 col-sm-6 col-md-3">
+                    <a th:href="@{/books/{id}(id=*{id})}"
+                       th:title="*{title}">
+                        <img class="card-image rounded" th:src="*{getPictureUrl()}" alt="Thumbnail [100%x225]"
+                             data-holder-rendered="true">
+                        <div class="btn-group d-flex justify-content-end mt-2 mr-3">
+                            <a th:href="@{/wishlist/remove/{id}(id=*{id})}"
+                               type="button" class="btn btn-sm"
+                               title="Remove from Wishlist">
+                                <i class="fa fa-trash-o fa-lg"></i>
+                            </a>
+                            <a th:href="@{/cart/add/{id}(id=*{id})}"
+                               type="button" class="btn btn-sm"
+                               th:classappend="*{getCopies() == 0}? 'disabled'"
+                               title="Add to Cart">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                            </a>
+                        </div>
+                        <div class="card-body pt-1">
+                            <div class="text-center">
+                                <h5 class="card-title" th:text="*{title}"></h5>
+                                <p class="card-text text-secondary">Author:
+                                    <a th:text="*{author}"
+                                       th:href="@{/authors/{id}(id=*{authorId})}">
+                                    </a>
+                                </p>
+                                <p class="card-text" th:text="|Price: *{price} BGN|"></p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

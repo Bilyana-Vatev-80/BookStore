@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+
+            <h2 class="text-white text-center">Order Confirmation</h2>
+            <hr class="hr-3 w-75 bg-white">
+            <br>
+
+            <div th:if="${#lists.isEmpty(cartItems)}"
+                 class="rounded p-2 m-3 shopping-cart-wrapper">
+                <h4 class="text-center my-4">The selected books are currently not in stock</h4>
+                <div class="row d-flex justify-content-center">
+                    <a th:href="@{/books/all}"
+                       type="button" class="btn btn-info btn-md btn-block w-25 my-3">
+                        Go to Homepage
+                    </a>
+                </div>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(cartItems)}"
+                 class="row rounded p-2 m-3 shopping-cart-wrapper">
+
+                <div class="cart cart-items-container col-md-8">
+                    <div class="row">
+                        <div class="row main bg-dark text-white font-weight-bold rounded-top">
+                            <div class="col-md-5">Book</div>
+                            <div class="col-md-3 text-center">Single Price</div>
+                            <div class="col-md-2 text-center">Total Price</div>
+                        </div>
+                    </div>
+
+                    <div th:each="item : ${cartItems}"
+                         th:object="${item}"
+                         class="row border-top border-bottom">
+                        <div class="row main align-items-center">
+                            <div class="col-md-2">
+                                <a th:href="@{/books/{id}(id=*{book.id})}"
+                                   th:title="*{book.title}">
+                                    <img class="img-fluid" th:src="*{book.pictureUrl}">
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/books/{id}(id=*{book.id})}"
+                                   th:title="*{book.title}">
+                                    <p class="card-title text-dark" th:text="*{book.title}"></p>
+                                </a>
+                                <p class="card-text text-secondary">Author:
+                                    <a th:text="|*{book.authorFirstName} *{book.authorLastName}|"
+                                       th:href="@{/authors/{id}(id=*{book.authorId})}">
+                                    </a>
+                                </p>
+                            </div>
+                            <div class="col-md-3 text-center"
+                                 th:text="|*{book.price} BGN|">
+                            </div>
+                            <div class="col-md-2 text-center"
+                                 th:text="|*{calculatePrice()} BGN|">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 summary">
+                    <div>
+                        <h5><b>Summary</b></h5>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col align-items-center">ITEMS:</div>
+                        <div class="col text-right"
+                             th:text="${itemsCounts}">3
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col">TOTAL PRICE:</div>
+                        <div class="col text-right"
+                             th:text="|${totalPrice} BGN|"></div>
+                    </div>
+                    <a th:href="@{/orders/create}"
+                       type="button"
+                       class="btn btn-info btn-md btn-block w-100 mt-5 mb-3">
+                        CREATE ORDER
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+<script th:src="@{/js/shopping.js}" type="text/javascript"></script>
+<script th:src="@{/js/modal.js}" type="text/javascript"></script>
+
+</body>
+</html>

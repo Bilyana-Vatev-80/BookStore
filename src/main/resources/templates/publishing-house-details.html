@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+
+            <article id="publishing-house-wrapper" class="rounded p-2 m-3">
+                <section th:object="${publishingHouse}"
+                         id="publishing-house-details"
+                         class="p-4 m-3 clearfix align-items-center">
+                    <section id="publishing-house-image" class="text-center">
+                        <img th:src="*{getImageUrl()}" alt="Thumbnail [100%x225]"
+                             class="float-md-left mr-3 rounded"
+                             data-holder-rendered="true">
+                    </section>
+                    <section id="publishing-house-info">
+                        <h1 th:text="*{name}">Title</h1>
+                        <p th:text="*{description}"
+                           class="text-justify">Description
+                        </p>
+                    </section>
+                </section>
+            </article>
+
+            <div th:replace="fragments/book-cards-list :: bookcards(${books})"></div>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

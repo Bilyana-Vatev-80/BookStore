@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+
+            <div class="row justify-content-end my-sm-2 mx-3">
+                <form id="searchForm" class="form-inline">
+                    <input id="searchBar" class="form-control mr-sm-3" type="search"
+                           placeholder="Search book by title or author" aria-label="Search">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+
+            <h4 sec:authorize="isAuthenticated()" class="text-white text-center mt-3"
+                th:text="|Hello, ${#authentication.getPrincipal().getUsername()}! Welcome to The Books Station!|">
+            </h4>
+            <hr class="hr-3 w-75 bg-white">
+
+            <div th:replace="fragments/book-cards-list :: bookcards(${books})" id="booksList"></div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

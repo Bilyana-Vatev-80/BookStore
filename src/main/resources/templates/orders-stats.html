@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+
+            <h2 class="text-white text-center">Orders Statistics</h2>
+            <hr class="hr-3 w-75 bg-white">
+            <br>
+
+            <div class="container">
+                <div class="table-responsive rounded">
+                    <table class="table table-dark table-bordered mx-auto text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">Total Orders</th>
+                            <th scope="col">Above 50 BGN</th>
+                            <th scope="col">Below 50 BGN</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${stats.getTotalOrders()}">Total Orders</td>
+                            <td th:text="${stats.getOrdersAboveFiftyBGN()}">Above 50 BGN</td>
+                            <td th:text="${stats.getOrdersBelowFiftyBGN()}">Below 50 BGN</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body>
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+
+            <h2 class="text-white text-center">Orders</h2>
+            <hr class="hr-3 w-75 bg-white">
+            <br>
+
+            <div id="orders-wrapper" class="rounded p-2 m-3">
+                <section id="orders-list" class="p-4 m-3 align-content-center">
+                    <h5 class="font-weight-bold mb-3">All Orders</h5>
+
+                    <div th:replace="fragments/orders-table :: orders-table(${orders})"></div>
+
+                    <div th:if="${#lists.isEmpty(orders)}">
+                        <h5 class="text-center">There are no orders yet</h5>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>

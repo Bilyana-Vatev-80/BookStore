@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons :: head"></head>
+
+<body class="form-page">
+
+<!-- Navigation-->
+<header th:replace="fragments/commons :: navbar"></header>
+
+<main class="align-content-center">
+
+    <!-- Main Content-->
+    <section class="container-fluid">
+
+        <!-- Sidebar-->
+        <nav th:replace="fragments/commons :: sidebar"></nav>
+
+        <!-- Page Content -->
+        <div id="content" class="container">
+            <form th:method="POST"
+                  th:action="@{/reviews/add}"
+                  th:object="${reviewAddBindingModel}"
+                  class="main-form mx-auto w-50 bg-blur">
+                <h2 class="text-white">Write a Review for</h2>
+                <h2 class="text-white" th:text="|'${bookTitle}'|"></h2>
+                <hr class="hr-3 w-100 bg-white">
+                <br>
+
+                <input name="bookId" type="hidden" th:value="${bookId}">
+                <div class="form-group">
+                    <label for="rating" class="col-form-label text-white font-weight-bold">Rating</label>
+                    <input th:field="*{rating}"
+                           th:errorclass="is-invalid"
+                           id="rating"
+                           name="rating"
+                           type="number"
+                           required
+                           min="1" max="5"
+                           class="form-control"
+                           placeholder="Rating"
+                           aria-describedby="ratingError"/>
+                    <small th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"
+                           id="ratingError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Rating is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="nickname" class="col-form-label text-white font-weight-bold">Your name</label>
+                    <input th:field="*{nickname}"
+                           th:errorclass="is-invalid"
+                           id="nickname"
+                           name="nickname"
+                           type="text"
+                           required
+                           class="form-control"
+                           placeholder="Your name"
+                           aria-describedby="nicknameError"/>
+                    <small th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"
+                           id="nicknameError"
+                           class="invalid-feedback errors alert alert-danger">
+                        Nickname is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="title" class="col-form-label text-white font-weight-bold">Title</label>
+                    <input th:field="*{title}"
+                           th:errorclass="is-invalid"
+                           id="title"
+                           name="title"
+                           type="text"
+                           class="form-control"
+                           placeholder="Title"/>
+                </div>
+                <div class="form-group">
+                    <label for="textContent" class="col-form-label text-white font-weight-bold">Your Review</label>
+                    <textarea th:field="*{textContent}"
+                              th:errorclass="is-invalid"
+                              id="textContent"
+                              name="textContent"
+                              type="text"
+                              class="form-control"
+                              placeholder="Your Review"></textarea>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    <input type="submit" class="btn btn-info btn-md btn-block w-50" value="Add Review"/>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="fragments/commons :: footer"></footer>
+
+</body>
+</html>
