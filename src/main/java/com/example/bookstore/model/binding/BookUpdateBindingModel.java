@@ -1,21 +1,19 @@
 package com.example.bookstore.model.binding;
 
-import com.example.bookstore.model.validator.UniqueByIsbn;
+import com.example.bookstore.model.validator.PastOrCurrentYear;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class BookAddBindingModel {
+public class BookUpdateBindingModel {
 
-    @UniqueByIsbn
+    private Long id;
+
     @NotBlank(message = "Please enter a valid isbn")
     private String isbn;
 
-    @NotBlank(message = "Please enter a valid title")
-    @Size(min = 1, max = 100, message = "Title should be between 1 and 100 characters long")
     private String title;
 
     private String description;
@@ -26,7 +24,7 @@ public class BookAddBindingModel {
     @Positive(message = "Copies count should be a positive number")
     private Integer copies;
 
-    @PastOrPresent
+    @PastOrCurrentYear
     private Integer releaseYear;
 
     @NotNull(message = "Price should be a positive number")
@@ -42,20 +40,29 @@ public class BookAddBindingModel {
     @NotEmpty(message = "Please select publishing house")
     private String publishingHouse;
 
-    @NotEmpty(message = "Please select first name")
+    @NotBlank(message = "Please enter author first name")
     private String authorFirstName;
 
-    @NotEmpty(message = "Please select last name")
+    @NotBlank(message = "Please enter author last name")
     private String authorLastName;
 
-    public BookAddBindingModel() {
+    public BookUpdateBindingModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public BookUpdateBindingModel setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getIsbn() {
         return isbn;
     }
 
-    public BookAddBindingModel setIsbn(String isbn) {
+    public BookUpdateBindingModel setIsbn(String isbn) {
         this.isbn = isbn;
         return this;
     }
@@ -64,7 +71,7 @@ public class BookAddBindingModel {
         return title;
     }
 
-    public BookAddBindingModel setTitle(String title) {
+    public BookUpdateBindingModel setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -73,7 +80,7 @@ public class BookAddBindingModel {
         return description;
     }
 
-    public BookAddBindingModel setDescription(String description) {
+    public BookUpdateBindingModel setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -82,7 +89,7 @@ public class BookAddBindingModel {
         return image;
     }
 
-    public BookAddBindingModel setImage(MultipartFile image) {
+    public BookUpdateBindingModel setImage(MultipartFile image) {
         this.image = image;
         return this;
     }
@@ -91,7 +98,7 @@ public class BookAddBindingModel {
         return copies;
     }
 
-    public BookAddBindingModel setCopies(Integer copies) {
+    public BookUpdateBindingModel setCopies(Integer copies) {
         this.copies = copies;
         return this;
     }
@@ -100,7 +107,7 @@ public class BookAddBindingModel {
         return releaseYear;
     }
 
-    public BookAddBindingModel setReleaseYear(Integer releaseYear) {
+    public BookUpdateBindingModel setReleaseYear(Integer releaseYear) {
         this.releaseYear = releaseYear;
         return this;
     }
@@ -109,7 +116,7 @@ public class BookAddBindingModel {
         return price;
     }
 
-    public BookAddBindingModel setPrice(BigDecimal price) {
+    public BookUpdateBindingModel setPrice(BigDecimal price) {
         this.price = price;
         return this;
     }
@@ -118,7 +125,7 @@ public class BookAddBindingModel {
         return language;
     }
 
-    public BookAddBindingModel setLanguage(String language) {
+    public BookUpdateBindingModel setLanguage(String language) {
         this.language = language;
         return this;
     }
@@ -127,7 +134,7 @@ public class BookAddBindingModel {
         return categories;
     }
 
-    public BookAddBindingModel setCategories(List<String> categories) {
+    public BookUpdateBindingModel setCategories(List<String> categories) {
         this.categories = categories;
         return this;
     }
@@ -136,7 +143,7 @@ public class BookAddBindingModel {
         return publishingHouse;
     }
 
-    public BookAddBindingModel setPublishingHouse(String publishingHouse) {
+    public BookUpdateBindingModel setPublishingHouse(String publishingHouse) {
         this.publishingHouse = publishingHouse;
         return this;
     }
@@ -145,7 +152,7 @@ public class BookAddBindingModel {
         return authorFirstName;
     }
 
-    public BookAddBindingModel setAuthorFirstName(String authorFirstName) {
+    public BookUpdateBindingModel setAuthorFirstName(String authorFirstName) {
         this.authorFirstName = authorFirstName;
         return this;
     }
@@ -154,7 +161,7 @@ public class BookAddBindingModel {
         return authorLastName;
     }
 
-    public BookAddBindingModel setAuthorLastName(String authorLastName) {
+    public BookUpdateBindingModel setAuthorLastName(String authorLastName) {
         this.authorLastName = authorLastName;
         return this;
     }
