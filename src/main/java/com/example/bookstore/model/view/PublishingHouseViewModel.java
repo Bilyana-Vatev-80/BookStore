@@ -1,20 +1,20 @@
 package com.example.bookstore.model.view;
 
-public class RequestsHouseViewModel {
+public class PublishingHouseViewModel {
 
     private Long id;
     private String name;
     private String description;
     private String imageUrl;
 
-    public RequestsHouseViewModel() {
+    public PublishingHouseViewModel() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public RequestsHouseViewModel setId(Long id) {
+    public PublishingHouseViewModel setId(Long id) {
         this.id = id;
         return this;
     }
@@ -23,7 +23,7 @@ public class RequestsHouseViewModel {
         return name;
     }
 
-    public RequestsHouseViewModel setName(String name) {
+    public PublishingHouseViewModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -32,7 +32,7 @@ public class RequestsHouseViewModel {
         return description;
     }
 
-    public RequestsHouseViewModel setDescription(String description) {
+    public PublishingHouseViewModel setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -41,7 +41,7 @@ public class RequestsHouseViewModel {
         return imageUrl;
     }
 
-    public RequestsHouseViewModel setImageUrl(String imageUrl) {
+    public PublishingHouseViewModel setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
