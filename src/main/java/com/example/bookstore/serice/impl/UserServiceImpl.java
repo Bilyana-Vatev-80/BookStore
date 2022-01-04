@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.bookstore.constant.GlobalConstants.*;
@@ -76,6 +77,11 @@ public class UserServiceImpl implements UserService {
     public Optional<UserViewModel> findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(userEntity -> modelMapper.map(userEntity, UserViewModel.class));
+    }
+
+    @Override
+    public List<String> findAllUsername() {
+        return userRepository.findAllByUsername();
     }
 
 }
