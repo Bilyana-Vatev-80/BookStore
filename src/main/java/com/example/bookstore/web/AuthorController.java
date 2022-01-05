@@ -67,6 +67,7 @@ public class AuthorController {
 
         model.addAttribute("author", viewModel);
         model.addAttribute("books",bookService.findBooksByAuthor(id));
+
         return "author-details";
     }
 
