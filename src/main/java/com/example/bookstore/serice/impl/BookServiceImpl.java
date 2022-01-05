@@ -1,8 +1,12 @@
 package com.example.bookstore.serice.impl;
 
+import com.example.bookstore.model.view.BookSummaryViewModel;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.serice.BookService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -15,5 +19,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public boolean existsByIsbn(String isbn) {
         return bookRepository.existsByIsbn(isbn);
+    }
+
+    @Transactional
+    @Override
+    public List<BookSummaryViewModel> findBooksByAuthor(Long id) {
+        return bookRepository.;
     }
 }
