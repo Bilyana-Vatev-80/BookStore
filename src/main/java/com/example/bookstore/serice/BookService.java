@@ -9,6 +9,14 @@ public interface BookService {
     boolean existsByIsbn(String isbn);
 
     List<BookSummaryViewModel> findBooksByAuthor(Long id);
+
+    List<BookSummaryViewModel> findAllBooks();
+
+    List<BookSummaryViewModel> findAllBooksOrderByTitle();
+
+    List<BookSummaryViewModel> findAllBooksOrderByAuthor();
+
+    List<BookSummaryViewModel> findAllBooksByOrderByBestSelling();
 }
 
 
