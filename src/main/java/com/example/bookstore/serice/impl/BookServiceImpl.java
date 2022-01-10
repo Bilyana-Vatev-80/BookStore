@@ -103,24 +103,32 @@ public class BookServiceImpl implements BookService {
                 .setActive(true)
                 .setPicture(getPictureEntity(img))
                 .setLanguage(getLanguageEnum(bookAddServiceModel.getLanguage()))
-                .setCategories(getCategoryEntity(bookAddServiceModel.getCategories()))
+                .setCategories(getCategoryEntities(bookAddServiceModel.getCategories()))
+                .setPublishingHouse()
 
         return null;
     }
 
-    private List<CategoryEntity> getCategoryEntity(List<String> categories) {
+    private List<CategoryEntity> getCategoryEntities(List<String> categories) {
         return categories
                 .stream()
                 .map(category -> {
                     CategoryEnum categoryEnum = CategoryEnum.valueOf(
                             category.toUpperCase().replaceAll(" ", "_"));
 
-                    return categoryRepository
-                            .findByCategory(categoryEnum)
-                            .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_CATEGORY));
+                    CategoryEntity categoryEntity = null;
+                    try {
+                        categoryEntity = categoryRepository
+                                .findByCategory(categoryEnum)
+                                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_CATEGORY));
+                    } catch (ObjectNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    return categoryEntity;
                 })
                 .collect(Collectors.toList());
     }
+
 
     private LanguageEnum getLanguageEnum(String language) {
         return LanguageEnum.valueOf(language.toUpperCase());
