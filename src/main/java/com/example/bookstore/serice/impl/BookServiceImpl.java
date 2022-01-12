@@ -1,15 +1,11 @@
 package com.example.bookstore.serice.impl;
 
-import com.example.bookstore.model.entity.BookEntity;
-import com.example.bookstore.model.entity.CategoryEntity;
-import com.example.bookstore.model.entity.PictureEntity;
+import com.example.bookstore.model.entity.*;
 import com.example.bookstore.model.entity.enums.CategoryEnum;
 import com.example.bookstore.model.entity.enums.LanguageEnum;
 import com.example.bookstore.model.service.BookAddServiceModel;
 import com.example.bookstore.model.view.BookSummaryViewModel;
-import com.example.bookstore.repository.BookRepository;
-import com.example.bookstore.repository.CategoryRepository;
-import com.example.bookstore.repository.PictureRepository;
+import com.example.bookstore.repository.*;
 import com.example.bookstore.serice.BookService;
 import com.example.bookstore.serice.cloudinary.CloudinaryImage;
 import com.example.bookstore.serice.cloudinary.CloudinaryService;
@@ -33,14 +29,20 @@ public class BookServiceImpl implements BookService {
     private final PictureRepository pictureRepository;
     private final CloudinaryService cloudinaryService;
     private final CategoryRepository categoryRepository;
+    private final PublishingHouseRepository publishingHouseRepository;
+    private final AuthorRepository authorRepository;
+    private final UserRepository userRepository;
 
 
-    public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper, PictureRepository pictureRepository, CloudinaryService cloudinaryService, CategoryRepository categoryRepository) {
+    public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper, PictureRepository pictureRepository, CloudinaryService cloudinaryService, CategoryRepository categoryRepository, PublishingHouseRepository publishingHouseRepository, AuthorRepository authorRepository, UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.modelMapper = modelMapper;
         this.pictureRepository = pictureRepository;
         this.cloudinaryService = cloudinaryService;
         this.categoryRepository = categoryRepository;
+        this.publishingHouseRepository = publishingHouseRepository;
+        this.authorRepository = authorRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -94,7 +96,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Long add(BookAddServiceModel bookAddServiceModel) throws IOException {
+    public Long add(BookAddServiceModel bookAddServiceModel) throws IOException, ObjectNotFoundException {
 
         MultipartFile img = bookAddServiceModel.getImage();
 
@@ -104,9 +106,37 @@ public class BookServiceImpl implements BookService {
                 .setPicture(getPictureEntity(img))
                 .setLanguage(getLanguageEnum(bookAddServiceModel.getLanguage()))
                 .setCategories(getCategoryEntities(bookAddServiceModel.getCategories()))
-                .setPublishingHouse()
+                .setPublishingHouse(getPublishingHouseEntity(bookAddServiceModel.getPublishingHouse()))
+                .setAuthor(getAuthorEntity(bookAddServiceModel.getAuthorFirstName(),
+                                            bookAddServiceModel.getAuthorLastName()))
+                .setCreator(getUserEntity(bookAddServiceModel.getCreator()));
 
-        return null;
+        bookEntity = bookRepository.save(bookEntity);
+
+        return bookEntity.getId();
+    }
+
+
+    private UserEntity getUserEntity(String username) throws ObjectNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_USER));
+    }
+
+    private AuthorEntity getAuthorEntity(String authorFirstName, String authorLastName) {
+        return authorRepository.findByFirstNameAndLastName(authorFirstName, authorLastName)
+                .orElseGet(() ->{
+                    AuthorEntity author = new AuthorEntity()
+                            .setFirstName(authorFirstName)
+                            .setLastName(authorLastName)
+                            .setPicture(pictureRepository.save(new PictureEntity(DEFAULT_AUTHOR_IMAGE_URL)));
+
+                    return authorRepository.save(author);
+                });
+    }
+
+    private PublishingHouseEntity getPublishingHouseEntity(String publishingHouseName) throws ObjectNotFoundException {
+        return publishingHouseRepository.findByName(publishingHouseName)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_PUBLISHING_HOUSE));
     }
 
     private List<CategoryEntity> getCategoryEntities(List<String> categories) {

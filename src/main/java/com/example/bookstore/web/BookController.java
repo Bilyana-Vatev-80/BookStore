@@ -7,6 +7,7 @@ import com.example.bookstore.model.entity.enums.LanguageEnum;
 import com.example.bookstore.model.service.BookAddServiceModel;
 import com.example.bookstore.repository.CategoryRepository;
 import com.example.bookstore.serice.*;
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/books")
@@ -79,7 +81,7 @@ public class BookController {
     private String addConfirm(@Valid BookAddBindingModel bookAddBindingModel,
                               BindingResult bindingResult,
                               RedirectAttributes redirectAttributes,
-                              @AuthenticationPrincipal UserDetails principal){
+                              @AuthenticationPrincipal UserDetails principal) throws ObjectNotFoundException, IOException {
 
         if(bindingResult.hasErrors()){
             redirectAttributes
