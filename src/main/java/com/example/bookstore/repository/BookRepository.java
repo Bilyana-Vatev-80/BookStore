@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity,Long> {
@@ -35,4 +36,9 @@ public interface BookRepository extends JpaRepository<BookEntity,Long> {
             "GROUP BY b.id " +
             "ORDER BY COUNT(o.id) DESC, b.addedOn DESC ")
     List<BookEntity> findAllByActiveTrueOrderByBestSelling();
+
+    @EntityGraph(value = "bookEntity")
+    Optional<BookEntity> findByIdAndActiveTrue(Long id);
+
+    boolean existsByPictureId(Long pictureId);
 }

@@ -1,9 +1,12 @@
 package com.example.bookstore.serice.impl;
 
+import com.example.bookstore.model.binding.BookUpdateBindingModel;
 import com.example.bookstore.model.entity.*;
 import com.example.bookstore.model.entity.enums.CategoryEnum;
 import com.example.bookstore.model.entity.enums.LanguageEnum;
 import com.example.bookstore.model.service.BookAddServiceModel;
+import com.example.bookstore.model.service.BookUpdateServiceModel;
+import com.example.bookstore.model.view.BookDetailViewModel;
 import com.example.bookstore.model.view.BookSummaryViewModel;
 import com.example.bookstore.repository.*;
 import com.example.bookstore.serice.BookService;
@@ -16,8 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Book;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.example.bookstore.constant.GlobalConstants.*;
 
@@ -116,6 +122,77 @@ public class BookServiceImpl implements BookService {
         return bookEntity.getId();
     }
 
+    @Transactional
+    @Override
+    public Optional<BookDetailViewModel> findBookDetails(Long id) {
+        return bookRepository.findByIdAndActiveTrue(id)
+                .map(this::getBookDetailViewModel);
+    }
+
+    @Transactional
+    @Override
+    public Optional<BookUpdateBindingModel> findBookToEdit(Long id) {
+        return bookRepository.findByIdAndActiveTrue(id)
+                .map(this::getBookToEdit);
+    }
+
+    @Override
+    public Long update(BookUpdateServiceModel bookUpdateServiceModel) throws ObjectNotFoundException, IOException {
+        BookEntity bookEntity = bookRepository.findByIdAndActiveTrue(bookUpdateServiceModel.getId())
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_BOOK));
+
+        MultipartFile img = bookUpdateServiceModel.getImage();
+        if(!"".equals(img.getOriginalFilename())){
+            deleteOldPicture(bookEntity.getId());
+            bookEntity.setPicture(getPictureEntity(img));
+        }
+
+        bookEntity
+                .setIsbn(bookUpdateServiceModel.getIsbn())
+                .setDescription(bookUpdateServiceModel.getDescription())
+                .setCopies(bookUpdateServiceModel.getCopies())
+                .getReleaseYear(bookUpdateServiceModel.getReleaseYear())
+
+        return null;
+    }
+
+    private void deleteOldPicture(Long id) throws ObjectNotFoundException {
+        BookEntity bookEntity = bookRepository
+                .findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_BOOK));
+
+        if(bookEntity.getPicture().getId() != null){
+            cloudinaryService.delete(bookEntity.getPicture().getPublicId());
+        }
+        Long pictureId = bookEntity.getPicture().getId();
+        bookEntity.setPicture(null);
+        bookRepository.save(bookEntity);
+
+        if(!bookRepository.existsByPictureId(pictureId)){
+            pictureRepository.deleteById(pictureId);
+        }
+    }
+
+    private BookDetailViewModel getBookDetailViewModel(BookEntity bookEntity) {
+        return modelMapper
+                .map(bookEntity, BookDetailViewModel.class)
+                .setAddedOn(bookEntity.getAddedOn().atZone(ZoneId.systemDefault()))
+                .setModified(bookEntity.getModified().atZone(ZoneId.systemDefault()))
+                .setCategories(DataUtils.getCategories(bookEntity.getCategories()))
+                .setAuthor(DataUtils.getFullName(bookEntity.getAuthor().getFirstName()
+                                                 , bookEntity.getAuthor().getLastName()))
+                .setAuthorId(bookEntity.getAuthor().getId())
+                .setCreator(DataUtils.getFullName(
+                        bookEntity.getCreator().getFirstName()
+                      , bookEntity.getCreator().getLastName()));
+
+    }
+
+    private BookUpdateBindingModel getBookToEdit(BookEntity bookEntity){
+        return modelMapper
+                .map(bookEntity, BookUpdateBindingModel.class)
+                .setCategories(DataUtils.getCategories(bookEntity.getCategories()));
+    }
 
     private UserEntity getUserEntity(String username) throws ObjectNotFoundException {
         return userRepository.findByUsername(username)
