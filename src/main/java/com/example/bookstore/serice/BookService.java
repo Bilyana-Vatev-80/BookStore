@@ -9,6 +9,7 @@ import javassist.tools.rmi.ObjectNotFoundException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BookService {
@@ -32,6 +33,18 @@ public interface BookService {
     Optional<BookUpdateBindingModel> findBookToEdit(Long id);
 
     Long update(BookUpdateServiceModel bookUpdateServiceModel) throws ObjectNotFoundException, IOException;
+
+    void delete(Long id) throws ObjectNotFoundException;
+
+    boolean exitsByIsbn(String isbn);
+
+    void increaseWithOneCopy(Long id) throws ObjectNotFoundException;
+
+    void decreaseWithOneCopy(Long id) throws ObjectNotFoundException;
+
+    List<String> findAllBookTitlesWithTwoOrLessCopies();
+
+    Map<String, Integer> getBookCategoriesMap() throws ObjectNotFoundException;
 }
 
 

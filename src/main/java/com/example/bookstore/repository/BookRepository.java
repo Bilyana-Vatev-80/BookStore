@@ -1,10 +1,12 @@
 package com.example.bookstore.repository;
 
 import com.example.bookstore.model.entity.BookEntity;
+import com.example.bookstore.model.entity.CategoryEntity;
 import com.example.bookstore.model.view.BookSummaryViewModel;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,4 +43,13 @@ public interface BookRepository extends JpaRepository<BookEntity,Long> {
     Optional<BookEntity> findByIdAndActiveTrue(Long id);
 
     boolean existsByPictureId(Long pictureId);
+
+    @Query("SELECT b.title FROM BookEntity b " +
+            "WHERE b.copies <= 2 " +
+            "ORDER BY b.title")
+    List<String> findAllByBookTitlesWithTwoOrLessCopies();
+
+    @Query("SELECT COUNT(b.id) FROM BookEntity b " +
+            "WHERE :category MEMBER b.categories")
+    Integer findByBooksCountByCategory(@Param("category")CategoryEntity category);
 }

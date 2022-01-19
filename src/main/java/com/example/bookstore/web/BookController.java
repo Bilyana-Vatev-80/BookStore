@@ -5,10 +5,13 @@ import com.example.bookstore.model.binding.BookUpdateBindingModel;
 import com.example.bookstore.model.entity.enums.CategoryEnum;
 import com.example.bookstore.model.entity.enums.LanguageEnum;
 import com.example.bookstore.model.service.BookAddServiceModel;
+import com.example.bookstore.model.service.BookUpdateServiceModel;
+import com.example.bookstore.model.view.BookDetailViewModel;
 import com.example.bookstore.repository.CategoryRepository;
 import com.example.bookstore.serice.*;
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import static com.example.bookstore.constant.GlobalConstants.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -32,9 +36,10 @@ public class BookController {
     private final WishlistService wishlistService;
     private final PagesViewCountService pagesViewCountService;
     private final CategoryRepository categoryRepository;
+    private final ReviewService reviewService;
 
 
-    public BookController(BookService bookService, ModelMapper modelMapper, PublishingHouseService publishingHouseService, ShoppingCartService shoppingCartService, RequestsStatsService requestsStatsService, WishlistService wishlistService, PagesViewCountService pagesViewCountService, CategoryRepository categoryRepository) {
+    public BookController(BookService bookService, ModelMapper modelMapper, PublishingHouseService publishingHouseService, ShoppingCartService shoppingCartService, RequestsStatsService requestsStatsService, WishlistService wishlistService, PagesViewCountService pagesViewCountService, CategoryRepository categoryRepository, ReviewService reviewService) {
         this.bookService = bookService;
         this.modelMapper = modelMapper;
         this.publishingHouseService = publishingHouseService;
@@ -43,6 +48,7 @@ public class BookController {
         this.wishlistService = wishlistService;
         this.pagesViewCountService = pagesViewCountService;
         this.categoryRepository = categoryRepository;
+        this.reviewService = reviewService;
     }
 //TODO to delete categoryRepository from constructor
     @GetMapping("/all")
@@ -98,7 +104,55 @@ public class BookController {
 
         Long bookId = bookService.add(bookAddServiceModel);
 
-        return "redirect:/books/"; //TODO add bookId
+        redirectAttributes.addFlashAttribute("addedSuccessfully", true);
+        return "redirect:/books/" + bookId; //TODO add bookId
+    }
+
+    @GetMapping("/{id}")
+    public String details(@PathVariable Long id,
+                          Model model) throws ObjectNotFoundException {
+
+        BookDetailViewModel bookDetailViewModel = bookService.findBookDetails(id)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_BOOK));
+
+        model.addAttribute("book", bookDetailViewModel);
+        model.addAttribute("viewsCount", pagesViewCountService.getPageViewsCount(String.format(VIEWS_COUNT_URI, id)));
+
+        return "book-details";
+    }
+
+    @PreAuthorize("isAdmin()")
+    @PatchMapping("/edit/{id}")
+    public String editConfirm(@PathVariable Long id,
+                              @Valid BookUpdateBindingModel bookUpdateBindingModel,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) throws ObjectNotFoundException, IOException {
+        if(bindingResult.hasErrors()){
+            redirectAttributes
+                    .addFlashAttribute("bookUpdateBindingModel", bookUpdateBindingModel)
+                    .addFlashAttribute("org.springframework.validation.BindingResult.bookUpdateBindingModel", bindingResult);
+
+            return "redirect:/book/edit" + id + "/errors";
+        }
+
+        BookUpdateServiceModel updateServiceModel = modelMapper
+                .map(bookUpdateBindingModel, BookUpdateServiceModel.class);
+        updateServiceModel.setId(id);
+
+        bookService.update(updateServiceModel);
+
+        redirectAttributes.addFlashAttribute("updatedSuccessfully", true);
+        return "redirect:/books/" + id;
+    }
+
+    @PreAuthorize("isAdmin()")
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) throws ObjectNotFoundException {
+        wishlistService.deleteBookFromAllWishlist(id);
+        shoppingCartService.deleteBookFromAllShoppingCarts(id);
+        reviewService.deleteAllReviewsForBook(id);
+        bookService.delete(id);
+        return "redirect:/books/all";
     }
 
     @ModelAttribute("bookUpdateBindingModel")

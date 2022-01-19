@@ -22,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.print.Book;
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.example.bookstore.constant.GlobalConstants.*;
@@ -151,10 +153,73 @@ public class BookServiceImpl implements BookService {
                 .setIsbn(bookUpdateServiceModel.getIsbn())
                 .setDescription(bookUpdateServiceModel.getDescription())
                 .setCopies(bookUpdateServiceModel.getCopies())
-                .getReleaseYear(bookUpdateServiceModel.getReleaseYear())
+                .setReleaseYear(bookUpdateServiceModel.getReleaseYear())
+                .setPrice(bookUpdateServiceModel.getPrice())
+                .setLanguage(getLanguageEnum(bookUpdateServiceModel.getLanguage()))
+                .setCategories(getCategoryEntities(bookUpdateServiceModel.getCategories()))
+                .setPublishingHouse(getPublishingHouseEntity(bookUpdateServiceModel.getPublishingHouseName()))
+                .setAuthor(getAuthorEntity(
+                        bookUpdateServiceModel.getAuthorFirstName(),
+                        bookUpdateServiceModel.getAuthorLastName()));
 
-        return null;
+        bookRepository.save(bookEntity);
+
+        return bookUpdateServiceModel.getId();
     }
+
+    @Override
+    public void delete(Long id) throws ObjectNotFoundException {
+        BookEntity bookEntity = bookRepository
+                .findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_BOOK));
+
+        bookEntity.setActive(false);
+        bookRepository.save(bookEntity);
+    }
+
+    @Override
+    public boolean exitsByIsbn(String isbn) {
+        return bookRepository.existsByIsbn(isbn);
+    }
+
+    @Override
+    public void increaseWithOneCopy(Long id) throws ObjectNotFoundException {
+        BookEntity bookEntity = bookRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_BOOK));
+
+        bookEntity.setCopies(bookEntity.getCopies() + 1);
+        bookRepository.save(bookEntity);
+    }
+
+    @Override
+    public void decreaseWithOneCopy(Long id) throws ObjectNotFoundException {
+        BookEntity bookEntity = bookRepository
+                .findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_BOOK));
+
+        bookEntity.setCopies(bookEntity.getCopies() - 1);
+        bookRepository.save(bookEntity);
+    }
+
+    @Override
+    public List<String> findAllBookTitlesWithTwoOrLessCopies() {
+        return bookRepository.findAllByBookTitlesWithTwoOrLessCopies();
+    }
+
+    @Override
+    public Map<String, Integer> getBookCategoriesMap() throws ObjectNotFoundException {
+        Map<String, Integer> categoriesMap = new HashMap<>();
+
+        for(CategoryEnum categoryEnum : CategoryEnum.values()){
+            CategoryEntity category = categoryRepository
+                    .findByCategory(categoryEnum)
+                    .orElseThrow(() -> new ObjectNotFoundException(OBJECT_NAME_CATEGORY));
+
+            categoriesMap.put(categoryEnum.name(), bookRepository.findByBooksCountByCategory(category));
+        }
+        return categoriesMap;
+    }
+
 
     private void deleteOldPicture(Long id) throws ObjectNotFoundException {
         BookEntity bookEntity = bookRepository
