@@ -20,4 +20,6 @@ public interface UserService {
 
     List<String> findAllUsername();
 
+    boolean isAdmin(String username);
+
 }

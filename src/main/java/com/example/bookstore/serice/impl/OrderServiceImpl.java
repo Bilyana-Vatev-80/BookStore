@@ -12,6 +12,7 @@ import com.example.bookstore.repository.OrderRepository;
 import com.example.bookstore.repository.UserRepository;
 import com.example.bookstore.serice.OrderService;
 import com.example.bookstore.serice.ShoppingCartService;
+import com.example.bookstore.serice.UserService;
 import com.example.bookstore.util.DataUtils;
 import com.example.bookstore.web.exception.InvalidOrderException;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ import com.example.bookstore.web.exception.ObjectNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.example.bookstore.constant.GlobalConstants.*;
 @Service
@@ -30,14 +32,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final UserService userService;
     private final OrderItemRepository orderItemRepository;
     private final ShoppingCartService shoppingCartService;
     private final ModelMapper modelMapper;
 
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, BookRepository bookRepository, OrderItemRepository orderItemRepository, ShoppingCartService shoppingCartService, ModelMapper modelMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, BookRepository bookRepository, UserService userService, OrderItemRepository orderItemRepository, ShoppingCartService shoppingCartService, ModelMapper modelMapper) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.userService = userService;
         this.orderItemRepository = orderItemRepository;
         this.shoppingCartService = shoppingCartService;
         this.modelMapper = modelMapper;
@@ -103,6 +107,32 @@ public class OrderServiceImpl implements OrderService {
                 .forEach(orderItemRepository::save);
         return null;
     }
+
+    @Override
+    public Optional<OrderViewModel> findById(Long id) {
+        return orderRepository.findById(id)
+                .map(this::getOrderViewModel);
+    }
+
+    @Override
+    public Boolean isOwner(String userName, Long id) {
+        Optional<UserEntity> userEntityOptional = userRepository
+                .findByUsername(userName);
+
+        Optional<OrderEntity> optionalOrderEntity = orderRepository
+                .findById(id);
+
+        if(userEntityOptional.isEmpty() || optionalOrderEntity.isEmpty()){
+            return false;
+        } else {
+            OrderEntity orderEntity = optionalOrderEntity.get();
+
+            return userService.isAdmin(userEntityOptional.get().getUsername())
+            || orderEntity.getCustomer().getUsername().equals(userName);
+        }
+
+    }
+
 
     private UserEntity getUserEntity(String username) {
         return userRepository

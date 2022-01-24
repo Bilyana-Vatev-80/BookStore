@@ -4,6 +4,7 @@ import com.example.bookstore.model.view.OrderViewModel;
 import javassist.tools.rmi.ObjectNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderService {
 
@@ -13,5 +14,9 @@ public interface OrderService {
 
     List<OrderViewModel> findLastFiveOrdersByCustomer(String username);
 
-    Long createOrder(String username) throws IllegalAccessException, ObjectNotFoundException;
+    Long createOrder(String username);
+
+    Optional<OrderViewModel> findById(Long id);
+
+    Boolean isOwner(String userName, Long id);
 }

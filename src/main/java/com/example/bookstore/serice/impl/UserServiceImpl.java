@@ -84,4 +84,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllByUsername();
     }
 
+    @Override
+    public boolean isAdmin(String username) {
+        Optional<UserEntity> user = userRepository
+                .findByUsername(username);
+
+        if(user.isEmpty()){
+            return false;
+        } else {
+            return user.get()
+                    .getRoles()
+                    .stream()
+                    .map(UserRoleEntity::getRole)
+                    .anyMatch(u -> u == UserRoleEnum.ADMIN);
+        }
+    }
+
 }
